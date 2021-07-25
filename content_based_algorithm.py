@@ -4,9 +4,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from mlflow.pyfunc import PythonModel
 from mlflow import mlflow, pyfunc
+import eel
+eel.init('/home/seema/Documents/projects/algorithms')
 
-raw_articles_data = pd.read_csv('/home/seema/Documents/projects/algorithms/datasets/articles1.csv', low_memory=False)  
+raw_articles_data = pd.read_csv('/home/seema/Documents/projects/algorithms/datasets/articles1.csv', low_memory=False)
 
+
+print(raw_articles_data)
 #remove all the nan values from data
 raw_articles_data = raw_articles_data.replace('',np.nan)
 raw_articles_data = raw_articles_data.dropna(axis="columns", how="any")
@@ -44,7 +48,6 @@ def article_recommender(input_df, word_vectorizer=data_vectors,  data_matrix = d
         
     return recommended_articles                            
 
-
 class covidArticleRecommender(PythonModel):
    
     ## defining objects needed for leadsModel prediction. 
@@ -64,11 +67,15 @@ class covidArticleRecommender(PythonModel):
     def predict(self,context,model_input):
         output_df = self.article_recommender(model_input)
         return [output_df.to_dict('records')]
-        
+              
 m = covidArticleRecommender(data_vectors = data_vectors,
                                        data_matrix = data_matrix,
                                        articles_data_copy = articles_data_copy,
                                        article_recommender = article_recommender)
-model_input = pd.DataFrame([["Convalescent", "Microbiota"]])
-model_output = m.predict(None,model_input)
-print(model_output)
+@eel.expose  
+def returnOutput(model_input):
+	model_output = m.predict(None,pd.DataFrame([[model_input]]))
+	print(model_output)
+	return model_output
+	
+eel.start('index.html')

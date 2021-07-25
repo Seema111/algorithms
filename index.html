@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Covid Article Recommendation App</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body style="background: blueviolet; color: white; font-size: 18px;">
+<div style="text-align: center">
+    <label for="data"><b>Enter your interested article name:</b></label><br/>
+    <textarea id="data"></textarea><br/><br/>
+    <button type="button" id="recommend" onclick="recommendArticles()">Show Articles</button>
+</div>
+<div id="finalArticles">
+   <div id="resultTitle" style="display: none">
+      <b>The Recommendation Results: </b> </br>
+      <table style="width:100%" id="tableRow">
+         <tr>
+            <th>S.N.</th>
+            <th>Title</th>
+         </tr>
+      </table>
+   </div>
+</div>
+</body>
+</html>
